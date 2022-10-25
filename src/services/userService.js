@@ -51,16 +51,6 @@ let handleUserLogin = (email, password) => {
     })
 }
 
-// let compareUserPassword = () =>{
-//     return new Promise ((resolve,reject)=> {
-//         try{
-
-//         }catch(e){
-//             reject(e)
-//         }
-//     })
-// }
-
 let checkUserEmail = (userEmail) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -79,6 +69,34 @@ let checkUserEmail = (userEmail) => {
     })
 }
 
+let getAllUsers = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = '';
+            if (userId === 'All') {
+                users = db.User.findAll({
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+            }
+            if (userId && userId !== 'All') {
+                users = await db.User.findOne({
+                    where: { id: userId },
+                    attributes: {
+                        exclude: ['password']
+                    }
+                })
+
+            }
+            resolve(users)
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 module.exports = {
-    handleUserLogin: handleUserLogin
+    handleUserLogin: handleUserLogin,
+    getAllUsers: getAllUsers
 }
